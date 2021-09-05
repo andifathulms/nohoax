@@ -35,9 +35,18 @@ class UserRegisterForm(forms.ModelForm):
 		email = cleaned_data.get('email')
 		try:
 			match = user.objects.get(email = email)
-			self.add_error('email', "This email address is already in use")
+			self.add_error('email', "Email ini telah digunakan")
 		except:
 			return email
+
+	def clean_nohp(self):
+		cleaned_data = super(UserRegisterForm, self).clean()
+		nohp = cleaned_data.get('nohp')
+		try:
+			match = user.objects.get(nohp = nohp)
+			self.add_error('nohp', "Nomor ini telah digunakan")
+		except:
+			return nohp
 
 	def save(self, commit=True):
 		userObj = super(UserRegisterForm, self).save(commit=False)
