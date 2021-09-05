@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'users',
     'crispy_forms',
     'phonenumber_field',
+    'six',
+    'djcelery',
 ]
 
 MIDDLEWARE = [
@@ -140,3 +142,9 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 AUTH_USER_MODEL = 'users.user'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'rubyghozal@gmail.com'
+EMAIL_HOST_PASSWORD = 'sapibetina'
+EMAIL_PORT = 587

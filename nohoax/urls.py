@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
 from main.views import home_view, index_view
-from users.views import register, profile
+from users.views import register, profile, activate
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +27,6 @@ urlpatterns = [
     path('profile/', profile, name="users-profile"),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name="users-login"),
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name="users-logout"),
+    #path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', activate, name='activate')
+    path('activate/<uidb64>/<token>', activate, name='activate'),
 ]
