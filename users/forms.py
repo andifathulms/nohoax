@@ -38,3 +38,10 @@ class UserRegisterForm(forms.ModelForm):
 			self.add_error('email', "This email address is already in use")
 		except:
 			return email
+
+	def save(self, commit=True):
+		userObj = super(UserRegisterForm, self).save(commit=False)
+		userObj.set_password(userObj.password) # set password properly before commit
+		if commit:
+			userObj.save()
+		return userObj

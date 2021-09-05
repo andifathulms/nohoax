@@ -1,12 +1,33 @@
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-
+from django.contrib.auth.models import AbstractBaseUser
+from .managers import UserManager
 # Create your models here.
-class user(models.Model):
-	id = models.BigAutoField(primary_key=True)
+
+class user(AbstractBaseUser):
+	
 	name = models.CharField(max_length=50)
-	email = models.EmailField()
+	email = models.EmailField(unique=True)
 	nohp = PhoneNumberField()
-	password = models.CharField(max_length=50)
 	dateJoin = models.DateTimeField(auto_now_add=True)
-	lastLogin = models.DateTimeField(auto_now_add=True)
+	active = models.BooleanField(default=True)
+	staff = models.BooleanField(default=False)
+	admin = models.BooleanField(default=False)
+
+	USERNAME_FIELD = 'email'
+	REQUIRED_FIELDS = []
+
+	objects = UserManager()
+
+	def __str__(self):
+		return self.email
+	def get_full_name(self):
+		return self.name
+	def get_short_name(self):
+		return self.name
+	def has_perm(self, perm, obj=None):
+		return True
+	def has_modeule_perm(self, app_label):
+		return True
+	
+	
