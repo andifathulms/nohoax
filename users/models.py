@@ -10,9 +10,9 @@ class user(AbstractBaseUser):
 	email = models.EmailField(unique=True)
 	nohp = PhoneNumberField()
 	dateJoin = models.DateTimeField(auto_now_add=True)
-	active = models.BooleanField(default=True)
-	staff = models.BooleanField(default=False)
-	admin = models.BooleanField(default=False)
+	is_active = models.BooleanField(default=True)
+	is_staff = models.BooleanField(default=False)
+	is_admin = models.BooleanField(default=False)
 
 	USERNAME_FIELD = 'email'
 	REQUIRED_FIELDS = []
@@ -27,7 +27,7 @@ class user(AbstractBaseUser):
 		return self.name
 	def has_perm(self, perm, obj=None):
 		return True
-	def has_modeule_perm(self, app_label):
+	def has_module_perms(self, app_label):
 		return True
 	
 	
