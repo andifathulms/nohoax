@@ -133,3 +133,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 PHONENUMBER_DEFAULT_REGION = 'ID'
+LOGIN_REDIRECT_URL ='main-home'
