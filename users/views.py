@@ -11,7 +11,8 @@ from django.template.loader import render_to_string
 from .tokens import account_activation_token
 from .models import user
 from django.core.mail import EmailMessage
-from .tasks import confirm_mail
+from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+from dj_rest_auth.registration.views import SocialLoginView
 # Create your views here.
 
 def register(request):
@@ -22,10 +23,11 @@ def register(request):
 			userObj = form.save(commit=False)
 			userObj.is_active = False
 			userObj.save()
-			current_site = get_current_site(request)
-
+			
 			#confirm_mail.apply_async((userObj.email, current_site), countdown=5)
-
+			
+			### Mail sender ###
+			current_site = get_current_site(request)
 			mail_subject = "Aktifasi akun anda"
 			message = render_to_string('acc_active_email.html',{
 				'user' : userObj,
@@ -37,7 +39,8 @@ def register(request):
 			email = EmailMessage(mail_subject, message, to=[to_email])
 			email.send()
 			return HttpResponse('Konfirmasi akun email anda')
-			
+			### End Mail Sender ###
+
 			#username = form.cleaned_data.get('name')
 			#messages.success(request, f'Account created for {username}!')
 			return redirect('users-login')
@@ -58,10 +61,13 @@ def activate(request, uidb64, token):
 		userObj.save()
 		login(request, userObj, backend='django.contrib.auth.backends.ModelBackend')
 		#return redirect('home')
-		return HttpResponse('Thank you for your email confirmation. Now you can login your account')
+		return HttpResponse('Thank you for your email confirmation. Now you can login your account') 
 	else:
-		return HttpResponse('Activation link is invalid')
+		return HttpResponse('Activation link is invalid') #Change endpoint later
 
 @login_required(login_url='users-login')
 def profile(request):
 	return render(request, 'profile.html', {})
+
+class FacebookLogin(SocialLoginView):
+    adapter_class = FacebookOAuth2Adapter

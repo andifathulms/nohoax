@@ -15,10 +15,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
-from django.urls import path
+from django.urls import path, include
 from main.views import home_view, index_view
-from users.views import register, profile, activate
-
+from users.views import register, profile, activate, FacebookLogin
+from users.api.views import registrationView
+from rest_framework.authtoken.views import obtain_auth_token
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index_view, name="main-index"),
@@ -29,4 +30,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name="users-logout"),
     #path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$', activate, name='activate')
     path('activate/<uidb64>/<token>', activate, name='activate'),
+    path('api/register/', registrationView, name="api-register"),
+    path('api/login/',obtain_auth_token,name="api-login"),
+    path('api/password_reset/', include('django_rest_passwordreset.urls', namespace='api-password_reset')), #obsolete
+    path('dj-rest-auth/', include('dj_rest_auth.urls')), #obsolete
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')), #obsolete
+    path('dj-rest-auth/facebook/', FacebookLogin.as_view(), name='fb_login'), #obsolete
 ]
